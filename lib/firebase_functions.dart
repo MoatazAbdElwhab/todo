@@ -21,4 +21,9 @@ class FirebaseFunctions {
     QuerySnapshot<TaskModel> querySnapshot = await tasksCollection.get();
     return querySnapshot.docs.map((docSnapshot) => docSnapshot.data()).toList();
   }
+
+  static Future<void> deleteTaskFromFirestore(String taskId) async {
+    CollectionReference<TaskModel> tasksCollection = getTasksCollection();
+    return tasksCollection.doc(taskId).delete();
+  }
 }
