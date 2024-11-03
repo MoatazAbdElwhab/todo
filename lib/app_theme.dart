@@ -11,38 +11,45 @@ class AppTheme {
   static const Color red = Color(0xffEC4B4B);
 
   static ThemeData lightTheme = ThemeData(
-    primaryColor: primary,
-    scaffoldBackgroundColor: backgroundLight,
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: primary,
-      unselectedItemColor: gray,
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-    ),
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: primary,
-      foregroundColor: white,
-      shape: CircleBorder(
-        side: BorderSide(
-          color: white,
-          width: 4,
+      primaryColor: primary,
+      scaffoldBackgroundColor: backgroundLight,
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: white,
+        selectedItemColor: primary,
+        unselectedItemColor: gray,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: primary,
+        foregroundColor: white,
+        shape: CircleBorder(
+          side: BorderSide(
+            color: white,
+            width: 4,
+          ),
         ),
       ),
-    ),
-    textTheme: const TextTheme(
-      titleMedium: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: black,
+      textTheme: const TextTheme(
+        titleMedium: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: black,
+        ),
+        titleSmall: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: black,
+        ),
       ),
-      titleSmall: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: black,
-      ),
-    ),
-  );
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: white,
+          shape: const StadiumBorder(),
+        ),
+      ));
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: primary,
