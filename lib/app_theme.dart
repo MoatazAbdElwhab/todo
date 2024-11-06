@@ -12,6 +12,7 @@ class AppTheme {
 
   static ThemeData lightTheme = ThemeData(
       primaryColor: primary,
+      appBarTheme: AppBarTheme(backgroundColor: Colors.transparent),
       scaffoldBackgroundColor: backgroundLight,
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         type: BottomNavigationBarType.fixed,
@@ -49,7 +50,9 @@ class AppTheme {
           foregroundColor: white,
           shape: const StadiumBorder(),
         ),
-      ));
+      ),
+      textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(foregroundColor: primary)));
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: primary,

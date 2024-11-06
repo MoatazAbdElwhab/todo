@@ -3,8 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/auth/login_screen.dart';
+import 'package:todo/auth/register_screen.dart';
 import 'package:todo/firebase_options.dart';
 import 'package:todo/home_screen.dart';
+import 'package:todo/tabs/settings/settings_provider.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
 
 void main() async {
@@ -13,8 +16,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseFirestore.instance.disableNetwork();
-  runApp(ChangeNotifierProvider(
-    create: (context) => TasksProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => SettingsProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => TasksProvider(),
+      ),
+    ],
     child: const TodoApp(),
   ));
 }
@@ -28,6 +38,8 @@ class TodoApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
+        LoginScreen.routeName: (context) => LoginScreen(),
+        RegisterScreen.routeName: (context) => RegisterScreen(),
       },
       initialRoute: HomeScreen.routeName,
       theme: AppTheme.lightTheme,
