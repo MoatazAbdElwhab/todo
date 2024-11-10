@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/auth/user_provider.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
@@ -14,6 +15,8 @@ class TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    String userId =
+        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Slidable(
@@ -22,11 +25,10 @@ class TaskItem extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: (_) {
-                FirebaseFunctions.deleteTaskFromFirestore(task.id).timeout(
-                  Duration(microseconds: 100),
-                  onTimeout: () {
+                FirebaseFunctions.deleteTaskFromFirestore(task.id, userId).then(
+                  (_) {
                     Provider.of<TasksProvider>(context, listen: false)
-                        .getTasks();
+                        .getTasks(userId);
                   },
                 );
               },

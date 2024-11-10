@@ -8,9 +8,9 @@ class TasksProvider with ChangeNotifier {
 
   DateTime selectedDate = DateTime.now();
 
-  Future<void> getTasks() async {
+  Future<void> getTasks(String userId) async {
     List<TaskModel> allTasks =
-        await FirebaseFunctions.getAllTasksFromFirestore();
+        await FirebaseFunctions.getAllTasksFromFirestore(userId);
     tasks = allTasks
         .where(
           (task) =>
@@ -22,8 +22,13 @@ class TasksProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void getSelectedDateTasks(DateTime selectedDate) {
+  void getSelectedDateTasks(DateTime selectedDate, String userId) {
     this.selectedDate = selectedDate;
-    getTasks();
+    getTasks(userId);
+  }
+
+  void reset() {
+    tasks = [];
+    selectedDate = DateTime.now();
   }
 }

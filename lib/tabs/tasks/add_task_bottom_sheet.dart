@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/auth/user_provider.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
@@ -24,6 +25,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   @override
   Widget build(BuildContext context) {
     TextStyle titleMediumStyle = Theme.of(context).textTheme.titleMedium!;
+
     return Padding(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -111,11 +113,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       description: descriptionController.text,
       date: selectedDate,
     );
-    FirebaseFunctions.addTaskToFirestore(task).timeout(
-      Duration(microseconds: 100),
-      onTimeout: () {
+    String userId =
+        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+    FirebaseFunctions.addTaskToFirestore(task, userId).then(
+      (_) {
         Navigator.of(context).pop();
-        Provider.of<TasksProvider>(context, listen: false).getTasks();
+        Provider.of<TasksProvider>(context, listen: false).getTasks(userId);
         Fluttertoast.showToast(
           msg: "Task added successfully",
           toastLength: Toast.LENGTH_LONG,

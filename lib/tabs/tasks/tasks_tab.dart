@@ -2,6 +2,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/auth/user_provider.dart';
 
 import 'package:todo/tabs/tasks/task_item.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
@@ -19,9 +20,11 @@ class _TasksTabState extends State<TasksTab> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     TasksProvider tasksProvider = Provider.of<TasksProvider>(context);
+    String userId =
+        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
 
     if (shouldGetTasks) {
-      tasksProvider.getTasks();
+      tasksProvider.getTasks(userId);
       shouldGetTasks = false;
     }
 
@@ -54,7 +57,7 @@ class _TasksTabState extends State<TasksTab> {
                 focusDate: tasksProvider.selectedDate,
                 lastDate: DateTime.now().add(Duration(days: 365)),
                 onDateChange: (selectedDate) {
-                  tasksProvider.getSelectedDateTasks(selectedDate);
+                  tasksProvider.getSelectedDateTasks(selectedDate, userId);
                 },
                 showTimelineHeader: false,
                 dayProps: const EasyDayProps(

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/login_screen.dart';
 import 'package:todo/auth/register_screen.dart';
+import 'package:todo/auth/user_provider.dart';
 import 'package:todo/firebase_options.dart';
 import 'package:todo/home_screen.dart';
 import 'package:todo/tabs/settings/settings_provider.dart';
@@ -15,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseFirestore.instance.disableNetwork();
+  // await FirebaseFirestore.instance.disableNetwork();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
@@ -23,6 +24,9 @@ void main() async {
       ),
       ChangeNotifierProvider(
         create: (context) => TasksProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => UserProvider(),
       ),
     ],
     child: const TodoApp(),
@@ -41,7 +45,7 @@ class TodoApp extends StatelessWidget {
         LoginScreen.routeName: (context) => LoginScreen(),
         RegisterScreen.routeName: (context) => RegisterScreen(),
       },
-      initialRoute: HomeScreen.routeName,
+      initialRoute: LoginScreen.routeName,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
