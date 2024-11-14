@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
+import 'package:todo/tabs/settings/settings_provider.dart';
 import 'package:todo/tabs/settings/settings_tab.dart';
 import 'package:todo/tabs/tasks/add_task_bottom_sheet.dart';
 import 'package:todo/tabs/tasks/tasks_tab.dart';
@@ -19,13 +21,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
+    SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+
     return Scaffold(
       body: tabs[currentIndex],
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 10,
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        color: AppTheme.white,
+        color: settingsProvider.isDark ? AppTheme.blueBlack : AppTheme.white,
         padding: EdgeInsets.zero,
         child: BottomNavigationBar(
           elevation: 0,

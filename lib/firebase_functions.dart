@@ -69,4 +69,13 @@ class FirebaseFunctions {
   }
 
   static Future<void> logout() => FirebaseAuth.instance.signOut();
+
+  static Future<void> updateTaskFromFirestore(
+    String taskId,
+    String userId,
+    TaskModel task,
+  ) async {
+    CollectionReference<TaskModel> tasksCollection = getTasksCollection(userId);
+    return tasksCollection.doc(taskId).update(task.toJson());
+  }
 }

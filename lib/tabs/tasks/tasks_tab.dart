@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/user_provider.dart';
+import 'package:todo/tabs/settings/settings_provider.dart';
 
 import 'package:todo/tabs/tasks/task_item.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TasksTab extends StatefulWidget {
   const TasksTab({super.key});
@@ -18,10 +20,12 @@ class _TasksTabState extends State<TasksTab> {
   bool shouldGetTasks = true;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     TasksProvider tasksProvider = Provider.of<TasksProvider>(context);
     String userId =
         Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+    SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     if (shouldGetTasks) {
       tasksProvider.getTasks(userId);
@@ -42,39 +46,42 @@ class _TasksTabState extends State<TasksTab> {
               start: 12,
               child: SafeArea(
                 child: Text(
-                  'To Do List',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: AppTheme.white),
+                  appLocalizations.todoList,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: settingsProvider.isDark
+                          ? AppTheme.backgroundDark
+                          : AppTheme.white),
                 ),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(top: size.height * 0.15),
               child: EasyInfiniteDateTimeLine(
-                firstDate: DateTime.now().subtract(Duration(days: 365)),
+                locale: settingsProvider.languageCode,
+                firstDate: DateTime.now().subtract(const Duration(days: 365)),
                 focusDate: tasksProvider.selectedDate,
-                lastDate: DateTime.now().add(Duration(days: 365)),
+                lastDate: DateTime.now().add(const Duration(days: 365)),
                 onDateChange: (selectedDate) {
                   tasksProvider.getSelectedDateTasks(selectedDate, userId);
                 },
                 showTimelineHeader: false,
-                dayProps: const EasyDayProps(
+                dayProps: EasyDayProps(
                   height: 79,
                   width: 58,
                   dayStructure: DayStructure.dayStrDayNum,
                   activeDayStyle: DayStyle(
                     decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: settingsProvider.isDark
+                          ? AppTheme.blueBlack
+                          : AppTheme.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
-                    dayStrStyle: TextStyle(
+                    dayStrStyle: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primary,
                     ),
-                    dayNumStyle: TextStyle(
+                    dayNumStyle: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primary,
@@ -82,34 +89,46 @@ class _TasksTabState extends State<TasksTab> {
                   ),
                   inactiveDayStyle: DayStyle(
                     decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: settingsProvider.isDark
+                          ? AppTheme.blueBlack
+                          : AppTheme.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
                     dayStrStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingsProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                     dayNumStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingsProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                   ),
                   todayStyle: DayStyle(
                     decoration: BoxDecoration(
-                      color: AppTheme.white,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: settingsProvider.isDark
+                          ? AppTheme.blueBlack
+                          : AppTheme.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
                     dayStrStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingsProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                     dayNumStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.black,
+                      color: settingsProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                   ),
                 ),

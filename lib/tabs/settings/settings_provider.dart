@@ -5,9 +5,6 @@ class SettingsProvider with ChangeNotifier {
   String languageCode = 'en';
 
   bool get isDark => themeMode == ThemeMode.dark;
-  // String get backgroundImage => isDark ? 'dark_bg' : 'default_bg';
-  // String get sebhaHeadImage => isDark ? 'head_sebha_dark' : 'head_sebha_logo';
-  // String get sebhaBodyImage => isDark ? 'body_sebha_dark' : 'body_sebha_logo';
 
   void changeTheme(ThemeMode selectedTheme) {
     themeMode = selectedTheme;

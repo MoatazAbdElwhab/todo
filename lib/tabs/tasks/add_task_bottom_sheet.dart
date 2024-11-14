@@ -6,9 +6,11 @@ import 'package:todo/app_theme.dart';
 import 'package:todo/auth/user_provider.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
+import 'package:todo/tabs/settings/settings_provider.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
 import 'package:todo/widgets/default_elevated_button.dart';
 import 'package:todo/widgets/default_text_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   @override
@@ -25,6 +27,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   @override
   Widget build(BuildContext context) {
     TextStyle titleMediumStyle = Theme.of(context).textTheme.titleMedium!;
+    SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
 
     return Padding(
       padding:
@@ -32,21 +36,23 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.5,
         padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: AppTheme.white,
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+        decoration: BoxDecoration(
+          color: settingsProvider.isDark ? AppTheme.blueBlack : AppTheme.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
         ),
         child: Form(
           key: formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Add new task',
+                appLocalizations.addNewTask,
                 style: titleMediumStyle,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               DefaultTextFormField(
-                hintText: 'Enter task title',
+                hintText: appLocalizations.enterTaskTitle,
                 controller: titleController,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -57,7 +63,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               ),
               const SizedBox(height: 16),
               DefaultTextFormField(
-                hintText: 'Enter task description',
+                hintText: appLocalizations.enterTaskDescription,
                 controller: descriptionController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -67,7 +73,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 },
               ),
               const SizedBox(height: 16),
-              Text('Select date', style: titleMediumStyle.copyWith()),
+              Text(appLocalizations.selectDate,
+                  style: titleMediumStyle.copyWith()),
               const SizedBox(height: 4),
               InkWell(
                 onTap: () async {
@@ -87,13 +94,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 },
                 child: Text(
                   dateFormat.format(selectedDate),
+                  style: titleMediumStyle,
+                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 32),
               DefaultElevatedButton(
                 height: 48,
                 width: MediaQuery.of(context).size.width,
-                label: 'Add task',
+                label: appLocalizations.addTask,
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     addTask();

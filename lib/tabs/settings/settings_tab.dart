@@ -7,6 +7,7 @@ import 'package:todo/firebase_functions.dart';
 import 'package:todo/tabs/settings/language.dart';
 import 'package:todo/tabs/settings/settings_provider.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsTab extends StatefulWidget {
   const SettingsTab({super.key});
@@ -20,10 +21,17 @@ class _SettingsTabState extends State<SettingsTab> {
     Language(name: 'English', code: 'en'),
     Language(name: 'العربية', code: 'ar')
   ];
+
+  // List<DropdownMenuItem<dynamic>> dropdownMenuItem = [
+  //   DropdownMenuItem(value: true, child: Text('Dark')),
+  //   DropdownMenuItem(value: false, child: Text('light')),
+  // ];
+
   bool isDarkTheme = false;
   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -38,7 +46,7 @@ class _SettingsTabState extends State<SettingsTab> {
             ),
             child: SafeArea(
               child: Text(
-                'To Do List',
+                appLocalizations.todoList,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
@@ -56,7 +64,7 @@ class _SettingsTabState extends State<SettingsTab> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Logout',
+                    appLocalizations.logout,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   IconButton(
@@ -69,16 +77,19 @@ class _SettingsTabState extends State<SettingsTab> {
                       Navigator.of(context)
                           .pushReplacementNamed(LoginScreen.routeName);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.logout,
                       size: 32,
+                      color: settingsProvider.isDark
+                          ? AppTheme.white
+                          : AppTheme.black,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               Text(
-                'Language',
+                appLocalizations.language,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 12),
@@ -87,7 +98,9 @@ class _SettingsTabState extends State<SettingsTab> {
                 width: double.infinity,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: settingsProvider.isDark
+                      ? AppTheme.backgroundDark
+                      : Colors.white,
                   border: Border.all(
                     color: AppTheme.primary,
                     width: 1.5,
@@ -117,12 +130,15 @@ class _SettingsTabState extends State<SettingsTab> {
                     iconEnabledColor: AppTheme.primary,
                     icon: Icon(Icons.arrow_drop_down_rounded),
                     iconSize: 42,
+                    dropdownColor: settingsProvider.isDark
+                        ? AppTheme.blueBlack
+                        : AppTheme.white,
                   ),
                 ),
               ),
               const SizedBox(height: 36),
               Text(
-                'Theme',
+                appLocalizations.theme,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 12),
@@ -131,36 +147,34 @@ class _SettingsTabState extends State<SettingsTab> {
                 width: double.infinity,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: settingsProvider.isDark
+                      ? AppTheme.backgroundDark
+                      : Colors.white,
                   border: Border.all(
                     color: AppTheme.primary,
                     width: 1.5,
                   ),
                 ),
                 child: DropdownButtonHideUnderline(
-                  child: DropdownButton<Language>(
+                  child: DropdownButton(
                     padding: EdgeInsets.symmetric(horizontal: 22),
-                    value: languages.firstWhere(
-                      (language) =>
-                          language.code == settingsProvider.languageCode,
-                    ),
-                    items: languages
-                        .map(
-                          (language) => DropdownMenuItem(
-                            value: language,
-                            child: Text(
-                              language.name,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) {
-                      settingsProvider.changeLanguage(value!.code);
+                    value: settingsProvider.isDark,
+                    items: [
+                      DropdownMenuItem(
+                          value: true, child: Text(appLocalizations.dark)),
+                      DropdownMenuItem(
+                          value: false, child: Text(appLocalizations.light)),
+                    ],
+                    onChanged: (isDark) {
+                      settingsProvider.changeTheme(
+                          isDark! ? ThemeMode.dark : ThemeMode.light);
                     },
                     iconEnabledColor: AppTheme.primary,
                     icon: Icon(Icons.arrow_drop_down_rounded),
                     iconSize: 42,
+                    dropdownColor: settingsProvider.isDark
+                        ? AppTheme.blueBlack
+                        : AppTheme.white,
                   ),
                 ),
               ),

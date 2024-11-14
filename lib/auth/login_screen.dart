@@ -9,6 +9,7 @@ import 'package:todo/firebase_functions.dart';
 import 'package:todo/home_screen.dart';
 import 'package:todo/widgets/default_elevated_button.dart';
 import 'package:todo/widgets/default_text_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,11 +23,17 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: Text(
+          appLocalizations.login,
+          style:
+              Theme.of(context).textTheme.titleMedium!.copyWith(fontSize: 26),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -36,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               DefaultTextFormField(
-                hintText: 'Email',
+                hintText: appLocalizations.email,
                 validator: (value) {
                   if (value == null || value.trim().length < 5) {
                     return 'Email can not be less than 5 characters';
@@ -48,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 16),
               DefaultTextFormField(
-                hintText: 'Password',
+                hintText: appLocalizations.password,
                 isPass: true,
                 validator: (value) {
                   if (value == null || value.trim().length < 8) {
@@ -63,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
               DefaultElevatedButton(
                 height: 56,
                 width: MediaQuery.of(context).size.width,
-                label: 'Login',
+                label: appLocalizations.login,
                 onPressed: () {
                   login();
                 },
