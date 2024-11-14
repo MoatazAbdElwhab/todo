@@ -3,6 +3,7 @@
         "autovalidate",
         "Firestore",
         "Fluttertoast",
+        "prefs",
         "العربية"
     ]
 }
