@@ -5,6 +5,8 @@ import 'package:todo/app_theme.dart';
 import 'package:todo/auth/login_screen.dart';
 import 'package:todo/auth/register_screen.dart';
 import 'package:todo/auth/user_provider.dart';
+import 'package:todo/core/cache_helper.dart';
+import 'package:todo/core/service_locator.dart';
 import 'package:todo/firebase_options.dart';
 import 'package:todo/home_screen.dart';
 import 'package:todo/tabs/settings/settings_provider.dart';
@@ -18,6 +20,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // await FirebaseFirestore.instance.disableNetwork();
+  setupServiceLocator();
+  await getIt<CacheHelper>().init();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
@@ -34,9 +38,15 @@ void main() async {
   ));
 }
 
-class TodoApp extends StatelessWidget {
+class TodoApp extends StatefulWidget {
   const TodoApp({super.key});
 
+  @override
+  State<TodoApp> createState() => _TodoAppState();
+}
+
+class _TodoAppState extends State<TodoApp> {
+  String? id = getIt<CacheHelper>().getData(key: 'id');
   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
@@ -48,7 +58,7 @@ class TodoApp extends StatelessWidget {
         RegisterScreen.routeName: (context) => RegisterScreen(),
         UpdateTaskScreen.routeName: (context) => UpdateTaskScreen(),
       },
-      initialRoute: LoginScreen.routeName,
+      initialRoute: id != null ? HomeScreen.routeName : LoginScreen.routeName,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: settingsProvider.themeMode,

@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/login_screen.dart';
 import 'package:todo/auth/user_provider.dart';
+import 'package:todo/core/cache_helper.dart';
+import 'package:todo/core/service_locator.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/tabs/settings/language.dart';
 import 'package:todo/tabs/settings/settings_provider.dart';
@@ -70,8 +72,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   IconButton(
                     onPressed: () {
                       FirebaseFunctions.logout();
-                      Provider.of<UserProvider>(context, listen: false)
-                          .updateUser(null);
+                      getIt<CacheHelper>().removeData(key: 'id');
                       Provider.of<TasksProvider>(context, listen: false)
                           .reset();
                       Navigator.of(context)

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/user_provider.dart';
+import 'package:todo/core/cache_helper.dart';
+import 'package:todo/core/service_locator.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/tabs/settings/settings_provider.dart';
@@ -122,8 +124,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       description: descriptionController.text,
       date: selectedDate,
     );
-    String userId =
-        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+    String userId = getIt<CacheHelper>().getData(key: 'id');
     FirebaseFunctions.addTaskToFirestore(task, userId).then(
       (_) {
         Navigator.of(context).pop();

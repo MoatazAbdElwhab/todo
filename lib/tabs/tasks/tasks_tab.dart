@@ -2,9 +2,9 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
-import 'package:todo/auth/user_provider.dart';
+import 'package:todo/core/cache_helper.dart';
+import 'package:todo/core/service_locator.dart';
 import 'package:todo/tabs/settings/settings_provider.dart';
-
 import 'package:todo/tabs/tasks/task_item.dart';
 import 'package:todo/tabs/tasks/tasks_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -23,8 +23,7 @@ class _TasksTabState extends State<TasksTab> {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     TasksProvider tasksProvider = Provider.of<TasksProvider>(context);
-    String userId =
-        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+    String userId = getIt<CacheHelper>().getData(key: 'id');
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     if (shouldGetTasks) {

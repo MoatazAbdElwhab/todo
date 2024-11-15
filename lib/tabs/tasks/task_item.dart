@@ -3,6 +3,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/user_provider.dart';
+import 'package:todo/core/cache_helper.dart';
+import 'package:todo/core/service_locator.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/models/task_model.dart';
 import 'package:todo/tabs/settings/settings_provider.dart';
@@ -19,8 +21,7 @@ class TaskItem extends StatelessWidget {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     TextTheme textTheme = Theme.of(context).textTheme;
-    String userId =
-        Provider.of<UserProvider>(context, listen: false).currentUser!.id;
+    String userId = getIt<CacheHelper>().getData(key: 'id');
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Slidable(

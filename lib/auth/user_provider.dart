@@ -1,20 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todo/models/user_model.dart';
 
 class UserProvider with ChangeNotifier {
   UserProvider() {
-    debugPrint(id);
     getUserData();
   }
-  UserModel? currentUser;
+  // UserModel? currentUser;
   String? id;
   String? email;
 
-  void updateUser(UserModel? user) {
-    currentUser = user;
-    notifyListeners();
-  }
+  // void updateUser(UserModel? user) {
+  //   currentUser = user;
+  //   notifyListeners();
+  // }
 
   void saveUserData({
     required String id,
@@ -23,6 +21,7 @@ class UserProvider with ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('id', id);
     prefs.setString('email', email);
+    prefs.setInt('name', 1);
   }
 
   Future<void> getUserData() async {
@@ -30,7 +29,6 @@ class UserProvider with ChangeNotifier {
     // if (prefs.getString('id') == null) return;
     id = prefs.getString('id');
     email = prefs.getString('email');
-    debugPrint(id);
 
     notifyListeners();
   }

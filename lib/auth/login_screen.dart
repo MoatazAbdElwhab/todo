@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:todo/app_theme.dart';
 import 'package:todo/auth/register_screen.dart';
 import 'package:todo/auth/user_provider.dart';
+import 'package:todo/core/cache_helper.dart';
+import 'package:todo/core/service_locator.dart';
 import 'package:todo/firebase_functions.dart';
 import 'package:todo/home_screen.dart';
 import 'package:todo/widgets/default_elevated_button.dart';
@@ -97,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: passwordController.text,
       ).then(
         (user) {
-          Provider.of<UserProvider>(context, listen: false).updateUser(user);
+          getIt<CacheHelper>().saveData(key: 'id', value: user.id);
           Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
         },
       ).catchError(
